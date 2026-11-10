@@ -1,0 +1,164 @@
+<!DOCTYPE html> 
+<html lang="es"> 
+<head> 
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Mapa Mental Dinámico: Tecnología Educativa</title> 
+    <!-- Tailwind CSS CDN --> 
+    <script src="https://tailwindcss.com"></script> 
+    <!-- FontAwesome for Icons --> 
+    <link rel="stylesheet" href="https://cloudflare.com"> 
+    <!-- Animate.css --> 
+    <link rel="stylesheet" href="https://cloudflare.com"/> 
+    <style> 
+        @import url('https://googleapis.com'); 
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); 
+            color: #f8fafc; 
+            min-height: 100vh; 
+        } 
+        .node-card { 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+            backdrop-filter: blur(12px); 
+        } 
+        .node-card:hover { 
+            transform: translateY(-5px) scale(1.02); 
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.04); 
+        } 
+        .pulse-glow { 
+            animation: pulse-animation 2s infinite; 
+        } 
+        @keyframes pulse-animation { 
+            0% { box-shadow: 0 0 0 0px rgba(99, 102, 241, 0.7); } 
+            70% { box-shadow: 0 0 0 15px rgba(99, 102, 241, 0); } 
+            100% { box-shadow: 0 0 0 0px rgba(99, 102, 241, 0); } 
+        } 
+        /* SVG Connection Lines Styling */ 
+        .line-connector { 
+            stroke-dasharray: 8; 
+            animation: dash 30s linear infinite; 
+        } 
+        @keyframes dash { 
+            to { stroke-dashoffset: -1000; } 
+        } 
+    </style> 
+</head> 
+<body class="flex flex-col min-h-screen relative overflow-x-hidden"> 
+
+    <!-- Header Navigation --> 
+    <header class="w-full bg-slate-900/80 backdrop-blur-md border-b border-slate-700/50 p-4 sticky top-0 z-40 flex justify-between items-center px-6"> 
+        <div class="flex items-center gap-3"> 
+            <div class="p-2 bg-indigo-600 rounded-lg animate-bounce"> 
+                <i class="fa-solid fa-brain text-white text-xl"></i> 
+            </div> 
+            <div> 
+                <h1 class="text-xl font-bold bg-gradient-to-r from-indigo-400 to-pink-400 bg-clip-text text-transparent">Tecnología Educativa</h1> 
+                <p class="text-xs text-slate-400">Mapa Mental Dinámico e Interactivo</p> 
+            </div> 
+        </div> 
+        <div class="flex gap-3"> 
+            <button onclick="shareResource()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-sm font-medium transition flex items-center gap-2 shadow-lg shadow-indigo-500/20"> 
+                <i class="fa-solid fa-share-nodes"></i> Enlace Público 
+            </button> 
+        </div> 
+    </header> 
+
+    <!-- Main Container --> 
+    <main class="flex-grow flex items-center justify-center p-6 relative"> 
+        <!-- Grid Mindmap Content --> 
+        <div class="max-w-7xl w-full grid grid-cols-1 md:grid-cols-3 gap-8 items-center relative z-10 my-auto"> 
+            
+            <!-- LEFT WING: CONCEPTOS BÁSICOS --> 
+            <div class="flex flex-col gap-6"> 
+                <h2 class="text-center font-bold text-lg text-indigo-400 uppercase tracking-wider border-b border-indigo-500/30 pb-2"> 
+                    <i class="fa-solid fa-cubes text-indigo-400 mr-2"></i>Conceptos Básicos 
+                </h2> 
+                
+                <!-- Pedagogy Card --> 
+                <div class="node-card bg-slate-800/80 border border-slate-700 p-5 rounded-2xl relative group cursor-pointer" onclick="openModal('pedagogia')"> 
+                    <div class="flex items-start justify-between"> 
+                        <div class="flex items-center gap-3"> 
+                            <div class="p-3 bg-blue-500/20 text-blue-400 rounded-xl"> 
+                                <i class="fa-solid fa-graduation-cap text-2xl"></i> 
+                            </div> 
+                            <div> 
+                                <h3 class="font-bold text-white text-lg">Pedagogía</h3> 
+                                <p class="text-xs text-slate-400">Ciencia del aprendizaje</p> 
+                            </div> 
+                        </div> 
+                        <span class="flex h-3 w-3 relative"> 
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span> 
+                            <span class="relative inline-flex rounded-full h-3 w-3 bg-blue-500"></span> 
+                        </span> 
+                    </div> 
+                    <p class="text-sm text-slate-300 mt-3 line-clamp-2">Estudia la educación y los métodos de enseñanza; responde al *porqué* y *para qué* del acto educativo.</p> 
+                    <div class="mt-4 flex items-center justify-between text-xs text-blue-400 font-semibold"> 
+                        <span>Ver definición expandida</span> 
+                        <i class="fa-solid fa-chevron-right group-hover:translate-x-1 transition-transform"></i> 
+                    </div> 
+                </div> 
+
+                <!-- Didactics Card --> 
+                <div class="node-card bg-slate-800/80 border border-slate-700 p-5 rounded-2xl relative group cursor-pointer" onclick="openModal('didactica')"> 
+                    <div class="flex items-start justify-between"> 
+                        <div class="flex items-center gap-3"> 
+                            <div class="p-3 bg-teal-500/20 text-teal-400 rounded-xl"> 
+                                <i class="fa-solid fa-chalkboard-user text-2xl animate-pulse"></i> 
+                            </div> 
+                            <div> 
+                                <h3 class="font-bold text-white text-lg">Didáctica</h3> 
+                                <p class="text-xs text-slate-400">Práctica de la enseñanza</p> 
+                            </div> 
+                        </div> 
+                        <span class="px-2 py-1 bg-teal-500/20 text-teal-300 text-xs rounded-full border border-teal-500/30"> 
+                            <i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Interactivo 
+                        </span> 
+                    </div> 
+                    <p class="text-sm text-slate-300 mt-3 line-clamp-2">Articula los métodos prácticos y procedimientos; define el *cómo* enseñar integrando tecnología.</p> 
+                    <div class="mt-4 flex items-center justify-between text-xs text-teal-400 font-semibold"> 
+                        <span>Ver detalle técnico</span> 
+                        <i class="fa-solid fa-chevron-right group-hover:translate-x-1 transition-transform"></i> 
+                    </div> 
+                </div> 
+
+                <!-- Technology Card --> 
+                <div class="node-card bg-slate-800/80 border border-slate-700 p-5 rounded-2xl relative group cursor-pointer" onclick="openModal('tecnologia')"> 
+                    <div class="flex items-start justify-between"> 
+                        <div class="flex items-center gap-3"> 
+                            <div class="p-3 bg-purple-500/20 text-purple-400 rounded-xl"> 
+                                <i class="fa-solid fa-microchip text-2xl"></i> 
+                            </div> 
+                            <div> 
+                                <h3 class="font-bold text-white text-lg">Tecnología</h3> 
+                                <p class="text-xs text-slate-400">Medios y Herramientas</p> 
+                            </div> 
+                        </div> 
+                        <span class="flex h-3 w-3 relative"> 
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span> 
+                            <span class="relative inline-flex rounded-full h-3 w-3 bg-purple-500"></span> 
+                        </span> 
+                    </div> 
+                    <p class="text-sm text-slate-300 mt-3 line-clamp-2">Conjunto de conocimientos técnicos aplicados para facilitar e innovar en el aprendizaje.</p> 
+                    <div class="mt-4 flex items-center justify-between text-xs text-purple-400 font-semibold"> 
+                        <span>Ver marco contextual</span> 
+                        <i class="fa-solid fa-chevron-right group-hover:translate-x-1 transition-transform"></i> 
+                    </div> 
+                </div> 
+            </div> 
+
+            <!-- CENTER: CORE NODE --> 
+            <div class="flex flex-col items-center justify-center my-6 md:my-0"> 
+                <div class="node-card bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 p-8 rounded-full border-4 border-slate-800 shadow-2xl text-center w-64 h-64 flex flex-col items-center justify-center pulse-glow relative cursor-pointer" onclick="openModal('nucleo')"> 
+                    <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mb-3 backdrop-blur-sm"> 
+                        <i class="fa-solid fa-atom text-4xl text-white animate-spin" style="animation-duration: 12s;"></i> 
+                    </div> 
+                    <h2 class="text-xl font-extrabold text-white leading-tight uppercase">Tecnología Educativa</h2> 
+                    <span class="mt-2 text-xs text-indigo-100 font-medium px-3 py-1 bg-black/20 rounded-full">Núcleo Central</span> 
+                </div> 
+            </div> 
+
+            <!-- RIGHT WING: EVOLUCIÓN HISTÓRICA --> 
+            <div class="flex flex-col gap-6"> 
+                <h2 class="text-center font-bold text-lg text-pink-400 uppercase tracking-wider border-b border-pink-500/30 pb-2"> 
+                    <i class="fa-solid fa-
